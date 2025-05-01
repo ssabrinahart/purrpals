@@ -1,0 +1,147 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PurrPal - Home</title>
+  <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}">
+</head>
+<body>
+  <!-- Nav Bar -->
+  <header>
+    <div class="logo">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'cats/images/logo.png' %}" alt="Cat Image">
+        <h1>PurrPal</h1>
+      </a>
+    </div>
+    <div class="nav-container">
+      <nav>
+        <a href="{% url 'home' %}" class="active">Public Forum</a>
+        <a href="{% url 'list' %}">Cat Profiles</a>
+        <a href="{% url 'user_list' %}">Users</a>
+
+        <div style="display: flex; flex-direction: column; float: right">
+          <a href="{% url 'settings' %}">Settings</a>
+          {% if request.session.username %}
+            <p class="logout">Logged in as: {{ request.session.username }}</p>
+          {% endif %}
+          <a href="{% url 'logged_out' %}" class="logout">Log Out</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  {% if messages %}
+  <ul class="message-list">
+    {% for message in messages %}
+      <li class="message {{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul> 
+  {% endif %}
+
+  <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+  <h3>Recent Activity</h3>
+    <ul>
+      {% for item in feed %}
+        <li>
+          <a href="{% url 'user_profile' item.user.username %}">{{ item.user.username }}</a>
+          {{ item.get_action_display }} 
+          {% if item.target_post %}
+            <a href="{% url 'post_detail' item.target_post.id %}">{{ item.target_post.title }}</a>
+          {% elif item.target_user %}
+            <a href="{% url 'user_profile' item.target_user.username %}">{{ item.target_user.username }}</a>
+          {% endif %}
+          - {{ item.timestamp|naturaltime }}
+        </li>
+      {% empty %}
+        <li>No recent activity</li>
+      {% endfor %}
+    </ul>
+    </div>
+
+
+  <!-- Sidebar -->
+  <div class="container">
+    <aside>
+      <a href="{% url 'home' %}" class="filter-link">
+        <button class="filter active">Popular</button>
+      </a>
+      <button class="filter">Newest</button>
+      <a href="{% url 'create' %}" class="filter-link">
+        <button class="filter">Create Post</button>
+      </a>
+    </aside>
+
+    <!-- Content -->
+    <main>
+      <!-- Search Bar -->
+      <form id="search-form" class="search-bar" style="display: flex;">
+        <input type="text" name="query" id="search-input" placeholder="Search for cat topics..."/>
+        <button type="submit" class="search-btn">🔍</button>
+      </form>
+      <!-- Search Results Box -->
+      <div id="results"></div>
+      
+      <!-- Dynamic Posts -->
+      {% if posts %}
+        {% for post in posts %}
+          <section class="post">
+            <div class="vote" data-post-id="{{ post.id }}">
+              <button class="upvote-btn">🔼</button>
+              <span class="vote-count">{{ post.votes }}</span>
+              <button class="downvote-btn">🔽</button>
+            </div>            
+            <div class="post-content">
+              <h2>{{ post.title }}</h2>
+              <p>{{ post.content }}</p>
+              <p><strong>By:</strong> {{ post.author }}</p>
+              <p><strong>Posted:</strong> {{ post.created_at }}</p>
+            </div>
+            <div style="position: absolute; right: 0; padding-right: 5px; display: flex; flex-direction: column;">
+              <a href="{% url 'post_detail' post.id %}" style="padding-bottom: 5px;">
+                <button class="draft-btn" type="button">View</button>
+              </a>
+
+              {% if request.session.username %}
+                <a href="{% url 'edit_post' post.id %}" style="padding-bottom: 5px;">
+                  <button class="draft-btn" type="button">Edit</button>
+                </a>
+              {% endif %}
+
+              {% if role == 'admin' or request.session.username == post.author %}
+                <form method="POST" action="{% url 'delete_post' post.id %}">
+                  {% csrf_token %}
+                  <button class="draft-btn" type="submit" onclick="return confirm('Are you sure you want to delete this post?');">
+                    Delete🗑️
+                  </button>
+                </form>
+              {% endif %}
+            </div>
+          </section>
+        {% endfor %}
+      {% else %}
+        <p style="padding: 10px; font-style: italic;">There are no posts right now. Be the first to create one!</p>
+      {% endif %}
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div>
+      <a href="#">Home</a> | <a href="#">About</a> | <a href="#">Privacy</a> |
+      <a href="#">FAQ </a>
+    </div>
+    <div>Copyright 2025 PurrPal</div>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{% static 'cats/js/search.js' %}"></script>
+  <script src="{% static 'cats/js/index.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}?v=2">
+
+</body>
+</html>

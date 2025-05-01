@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Post - PurrPal</title>
+  <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}">
+</head>
+<body>
+  <!-- Nav Bar -->
+  <header>
+    <div class="logo">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'cats/images/logo.png' %}" alt="Cat Image">
+        <h1>PurrPal</h1>
+      </a>
+    </div>
+    <div class="nav-container">
+      <nav>
+        <a href="{% url 'home' %}" class="active">Public Forum</a>
+        <a href="{% url 'list' %}">Cat Profiles</a>
+        <a href="{% url 'user_list' %}">Users</a>
+
+        <div style="display: flex; flex-direction: column; float: right">
+          <a href="{% url 'settings' %}">Settings</a>
+          {% if request.session.username %}
+            <p class="logout">Logged in as: {{ request.session.username }}</p>
+          {% endif %}
+          <a href="{% url 'logged_out' %}" class="logout">Log Out</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  {% if messages %}
+  <ul class="message-list">
+    {% for message in messages %}
+      <li class="message {{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul> 
+  {% endif %}
+
+  <!-- Edit Post Form -->
+  <main style="padding: 20px;">
+    <form method="POST" action="{% url 'edit_post' post.id %}" class="post-form">
+      {% csrf_token %}
+      <input type="text" name="title" class="post-title" value="{{ post.title }}" required />
+      <textarea name="content" class="post-content" required>{{ post.content }}</textarea>
+
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="anonymous-note">
+          <p class="char-count">0/512 characters</p>
+          <p>*All Posts are Anonymous</p>
+        </div>
+
+        <div class="post-buttons">
+          <a href="{% url 'post_detail' post.id %}">
+            <button type="button" class="draft-btn">Cancel</button>
+          </a>
+          <button type="submit" class="submit-btn">Submit Post</button>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div>
+      <a href="#">Home</a> | <a href="#">About</a> | <a href="#">Privacy</a> | <a href="#">FAQ </a>
+    </div>
+    <div>Copyright 2025 PurrPal</div>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{% static 'cats/js/createPost.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}?v=2">
+</body>
+</html>

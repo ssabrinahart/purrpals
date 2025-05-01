@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Comment</title>
+  <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}">
+</head>
+<body>
+    <!-- Nav Bar -->
+  <header>
+    <div class="logo">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'cats/images/logo.png' %}" alt="Cat Image">
+        <h1>PurrPal</h1>
+      </a>
+    </div>
+    <div class="nav-container">
+      <nav>
+        <a href="{% url 'home' %}" class="active">Public Forum</a>
+        <a href="{% url 'list' %}">Cat Profiles</a>
+        <a href="{% url 'user_list' %}">Users</a>
+
+        <a href="{% url 'settings' %}">Settings</a>
+        <a href="{% url 'logged_out' %}" class="logout">Log Out</a>
+      </nav>
+    </div>
+  </header>
+  <main style="display: flex; flex-direction: column; justify-content: center; align-items: center; padding-left: 20px;">
+
+  <h2>Edit Comment</h2>
+  <form method="POST">
+    {% csrf_token %}
+    <textarea name="text" rows="4" cols="50" required>{{ comment.text }}</textarea><br><br>
+    <button type="submit" class="submit-btn">Save Changes</button>
+  </form>
+</main>
+  <footer style="margin-top: 20px;">
+    <div>
+      <a href="#">Home</a> | <a href="#">About</a> | <a href="#">Privacy</a> |
+      <a href="#">FAQ</a>
+    </div>
+    <div>Copyright 2025 PurrPal</div>
+  </footer>
+</body>
+</html>

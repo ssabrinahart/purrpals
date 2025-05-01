@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>PurrPal - Create a Post</title>
+    <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}">
+  </head>
+
+  <body>
+    <!-- Confirmation Popup -->
+    <div id="cancel-popup" class="popup-overlay" style="display: none;">
+      <div class="popup-content">
+        <p>Are you sure you want to cancel your post?</p>
+        <a href="{% url 'home' %}">
+          <button id="confirm-cancel">Yes</button>
+        </a>
+        <button id="cancel-no">No</button>
+      </div>
+    </div>
+
+    <!-- Nav Bar -->
+    <header>
+      <div class="logo">
+        <a href="{% url 'home' %}">
+          <img src="{% static 'cats/images/logo.png' %}" alt="Cat Image">
+          <h1>PurrPal</h1>
+        </a>
+      </div>
+      <div class="nav-container">
+        <nav>
+          <a href="{% url 'home' %}" class="active">Public Forum</a>
+          <a href="{% url 'list' %}">Cat Profiles</a>
+          <a href="{% url 'user_list' %}">Users</a>
+          <div style="display: flex; flex-direction: column; float: right">
+            <a href="{% url 'settings' %}">Settings</a>
+            {% if request.session.username %}
+              <p class="logout">Logged in as: {{ request.session.username }}</p>
+            {% endif %}
+            <a href="{% url 'logged_out' %}" class="logout">Log Out</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+    {% if messages %}
+    <ul class="message-list">
+      {% for message in messages %}
+        <li class="message {{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul> 
+    {% endif %}
+
+    <!-- Sidebar -->
+    <div class="container">
+      <aside>
+        <a href="{% url 'home' %}" class="filter-link">
+          <button class="filter">Popular</button>
+        </a>
+        <button class="filter">Newest</button>
+        <a href="{% url 'create' %}" class="filter-link">
+          <button class="filter active">Create Post</button>
+        </a>
+      </aside>
+
+      <!-- Content -->
+      <main>
+        <form method="POST" action="{% url 'create' %}" class="post-form">
+          {% csrf_token %}
+          <input type="text" name="title" class="post-title" placeholder="Title of Post" required />
+          <textarea name="content" class="post-content" placeholder="Write your post here..." required></textarea>
+
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="anonymous-note">
+              <p class="char-count">0/512 characters</p>
+            </div>
+
+            <div class="post-buttons">
+              <button type="button" class="draft-btn">Cancel</button>
+              <button type="button" class="draft-btn">Save Draft</button>
+              <button type="submit" class="submit-btn">Submit Post</button>
+            </div>
+          </div>
+        </form>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div>
+        <a href="#">Home</a> | <a href="#">About</a> | <a href="#">Privacy</a> | <a href="#">FAQ</a>
+      </div>
+      <div>Copyright 2025 PurrPal</div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'cats/js/createPost.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}?v=2">
+  </body>
+</html>

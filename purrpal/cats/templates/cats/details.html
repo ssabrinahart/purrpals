@@ -1,0 +1,194 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>PurrPal - Cat Profile</title>
+    <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}">
+  </head>
+  <body>
+    <!-- Nav Bar -->
+    <header>
+      <div class="logo">
+        <a href="{% url 'home' %}">
+          <img src="{% static 'cats/images/logo.png' %}" alt="Cat Image">
+          <h1>PurrPal</h1>
+        </a>
+      </div>
+      <div class="nav-container">
+        <nav>
+          <a href="{% url 'home' %}" class="active">Public Forum</a>
+          <a href="{% url 'list' %}">Cat Profiles</a>
+
+          <!-- The two links below don't have views yet, so use static or placeholders -->
+          <a href="{% url 'user_list' %}">Users</a>
+
+          <div style="display: flex; flex-direction: column; float: right">
+            <a href="{% url 'settings' %}">Settings</a>
+            {% if request.session.username %}
+              <p class="logout">Logged in as: {{ request.session.username }}</p>
+            {% endif %}
+            <a href="{% url 'logged_out' %}" class="logout">Log Out</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    {% if messages %}
+    <ul class="message-list">
+      {% for message in messages %}
+        <li class="message {{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul> 
+    {% endif %}
+
+    <div class="container">
+      <!-- Sidebar -->
+      <aside>
+        <a href="{% url 'list' %}"><button class="filter active">All Cats</button></a>
+        <button class="filter">New Cat</button>
+        <button class="filter">Edit Cat Info</button>
+        <button class="filter">Remove Cat</button>
+      </aside>
+
+      <!-- Content -->
+      <main>
+        <section class="cat-profile">
+          <div class="cat-header">Willow</div>
+          <div class="cat-info">
+            <!-- Left Side: Text Info -->
+            <div class="cat-text">
+              <p><strong>Breed:</strong> Siamese</p>
+              <p><strong>Age:</strong> 3 years old</p>
+              <p><strong>Diet:</strong> Wet food only</p>
+              <p><strong>Vet Info:</strong> Dr. Smith</p>
+              <p><strong>Medicationss:</strong> Melatonin</p>
+            </div>
+
+            <!-- Right Side: Cat Image & Speech Bubble -->
+            <div class="cat-image-container">
+              <div class="speech-bubble">Meow!</div>
+              <img src="{% static 'cats/images/cat.jpg' %}" alt="Cat 1 Image">
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between">
+            <!-- Calendar & Upcoming Events -->
+            <div class="schedule">
+              <div class="calendar">
+                <p><strong>FEBRUARY 2025</strong></p>
+                <table>
+                  <tr>
+                    <th>S</th>
+                    <th>M</th>
+                    <th>T</th>
+                    <th>W</th>
+                    <th>T</th>
+                    <th>F</th>
+                    <th>S</th>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>30</td>
+                    <td>31</td>
+                    <td class="highlight">1</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td>8</td>
+                  </tr>
+                  <tr>
+                    <td>9</td>
+                    <td>10</td>
+                    <td>11</td>
+                    <td>12</td>
+                    <td>13</td>
+                    <td>14</td>
+                    <td>15</td>
+                  </tr>
+                  <tr>
+                    <td>16</td>
+                    <td>17</td>
+                    <td>18</td>
+                    <td>19</td>
+                    <td>20</td>
+                    <td>21</td>
+                    <td>22</td>
+                  </tr>
+                  <tr>
+                    <td>23</td>
+                    <td>24</td>
+                    <td>25</td>
+                    <td>26</td>
+                    <td>27</td>
+                    <td>28</td>
+                    <td>29</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="upcoming-events">
+                <p><strong>Upcoming:</strong></p>
+                <ul>
+                  <li>Vet 2/6</li>
+                  <li>Grooming 2/18</li>
+                  <li>Trim Nails 2/25</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Favorite Foods -->
+            <div class="favorite-foods">
+              <p><strong>Willow's Favorite Foods</strong></p>
+              <div class="food-list">
+                <div class="food-item">Tiki Wet</div>
+                <div class="food-item">Purina Wet</div>
+                <div class="food-item">Churros</div>
+              </div>
+              <div class="radio-btn">
+                <label>
+                  Still enjoying these foods?
+                  <input type="radio" name="choice-radio"/>
+                  Yes
+                </label>
+                <label>
+                  <input type="radio" name="choice-radio"/>
+                  No
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="buttons">
+            <button class="quick-edit">Edit</button>
+            <a href="{% url 'list' %}">
+              <button class="back-cats">Back to all cats</button>
+            </a>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div>
+        <a href="#">Home</a> | <a href="#">About</a> | <a href="#">Privacy</a> |
+        <a href="#">FAQ </a>
+      </div>
+      <div>Copyright 2025 PurrPal</div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'cats/js/details.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}?v=2">
+  </body>
+</html>

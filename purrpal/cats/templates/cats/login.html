@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - PurrPal</title>
+  <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}">
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh; justify-content: space-between;">
+  <!-- Nav Bar -->
+  <header>
+    <div class="logo">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'cats/images/logo.png' %}" alt="Cat Image">
+        <h1>PurrPal</h1>
+      </a>
+    </div>
+    <div class="nav-container">
+      <nav>
+        <a href="{% url 'home' %}" class="active">Public Forum</a>
+        <a href="#">Cat Health</a>
+        <a href="#">Cat Profiles</a>
+        <a href="#">Settings</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Login Form -->
+  <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; flex-grow: 1;">
+    <h2>Welcome Back 🐾</h2>
+
+    {% if error %}
+      <div class="purrpal-login-error" style="color: red; margin-bottom: 10px;">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'login' %}" style="display: flex; flex-direction: column; width: 250px; padding-bottom: 20px;">
+      {% csrf_token %}
+      <input class="post-title" style="margin-bottom: 10px;" type="text" name="username" placeholder="Username" required>
+      <input class="post-title" style="margin-bottom: 10px;" type="password" name="password" placeholder="Password" required>
+      <button class="submit-btn" type="submit" style="display: flex; justify-content: center; align-items: center; width: 250px;">Login</button>
+    </form>
+    <a href="{% url 'register' %}"><button class="submit-btn" style="width: 250px;">Create Account</button></a>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div>
+      <a href="#">Home</a> | <a href="#">About</a> | <a href="#">Privacy</a> |
+      <a href="#">FAQ</a>
+    </div>
+    <div>Copyright 2025 PurrPal</div>
+  </footer>
+</body>
+</html>

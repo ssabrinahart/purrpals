@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PurrPal - Home Logged Out</title>
+  <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}">
+</head>
+<body>
+  <!-- Nav Bar -->
+  <header>
+    <div class="logo">
+        <img src="{% static 'cats/images/logo.png' %}" alt="Cat Image">
+        <h1>PurrPal</h1>
+    </div>
+    <div class="nav-container">
+      <nav>
+        <a href="{% url 'home' %}" class="active">Public Forum</a>
+        <a href="#">Cat Health</a>
+        <a href="#">Cat Profiles</a>
+        <a href="#">Settings</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <div class="container">
+    <aside>
+      <button class="filter active">Popular</button>
+      <button class="filter">Newest</button>
+    </aside>
+
+    <!-- Content -->
+    <main>
+      {% if posts %}
+        {% for post in posts %}
+          <section class="post">
+            <div class="vote">
+              <button disabled>🔼</button>
+              <span>{{ post.votes }}</span>
+              <button disabled>🔽</button>
+            </div>
+            <div class="post-content">
+              <h2>{{ post.title }}</h2>
+              <p>{{ post.content }}</p>
+              <p><strong>By:</strong> {{ post.author }}</p>
+              <p><strong>Posted:</strong> {{ post.created_at }}</p>
+            </div>
+          </section>
+        {% endfor %}
+      {% else %}
+        <p style="padding: 10px; font-style: italic;">There are no posts right now. Be the first to create one!</p>
+      {% endif %}
+
+      <!-- Login Required Box -->
+      <div class="login-box">
+        <h2>Please Log In to View and Interact</h2>
+        <div>
+          <a href="{% url 'login' %}"><button class="login-btn">Login</button></a>
+          <a href="{% url 'register' %}"><button class="signup-btn">Create Account</button></a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div>
+      <a href="#">Home</a> | <a href="#">About</a> | <a href="#">Privacy</a> | <a href="#">FAQ</a>
+    </div>
+    <div>Copyright 2025 PurrPal</div>
+  </footer>
+</body>
+</html>

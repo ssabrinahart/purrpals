@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Settings - PurrPal</title>
+  <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}">
+</head>
+<body>
+  <!-- Nav Bar -->
+  <header>
+    <div class="logo">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'cats/images/logo.png' %}" alt="Cat Image">
+        <h1>PurrPal</h1>
+      </a>
+    </div>
+    <div class="nav-container">
+      <nav>
+        <a href="{% url 'home' %}" class="active">Public Forum</a>
+        <a href="{% url 'list' %}">Cat Profiles</a>
+        <a href="{% url 'user_list' %}">Users</a>
+
+        <a href="{% url 'settings' %}">Settings</a>
+        <a href="{% url 'logged_out' %}" class="logout">Log Out</a>
+      </nav>
+    </div>
+  </header>
+
+  <main style="padding: 20px; display: flex; justify-content: space-between;">
+    <!-- User Edit Profile -->
+    <div>
+        <h2>Edit Your Profile</h2>
+        <form method="POST" action="{% url 'settings' %}">
+        {% csrf_token %}
+        <label>Username (cannot change): <strong>{{ user.username }}</strong></label><br><br>
+        <label>User Type (cannot change): <strong>{{ profile.role }}</strong></label><br><br>
+
+        <label>First Name:</label><br>
+        <input type="text" name="first_name" value="{{ user.first_name }}" required><br><br>
+
+        <label>Last Name:</label><br>
+        <input type="text" name="last_name" value="{{ user.last_name }}" required><br><br>
+
+        <label>Email:</label><br>
+        <input type="email" name="email" value="{{ user.email }}" required><br><br>
+
+        <label>New Password (optional):</label><br>
+        <input type="password" name="password"><br><br>
+
+        <label>Gender:</label><br>
+        <select name="gender">
+            <option value="female" {% if profile.gender == "female" %}selected{% endif %}>Female</option>
+            <option value="male" {% if profile.gender == "male" %}selected{% endif %}>Male</option>
+            <option value="other" {% if profile.gender == "other" %}selected{% endif %}>Other</option>
+        </select><br><br>
+
+        <button type="submit" class="submit-btn">Update Profile</button>
+        </form>
+
+        {% if profile.role == "admin" %}
+        <hr>
+        <h2>Admin: Manage User Roles</h2>
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+            </tr>
+            {% for u in all_users %}
+            <tr>
+                <td>{{ u.user.username }}</td>
+                <td>{{ u.user.email }}</td>
+                <td>{{ u.role }}</td>
+                <td>
+                {% if u.role != "admin" %}
+                    <form method="POST" action="{% url 'change_role' u.user.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="role" value="admin">
+                    <button type="submit">Make Admin</button>
+                    </form>
+                {% endif %}
+                {% if u.role != "regular" %}
+                    <form method="POST" action="{% url 'change_role' u.user.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="role" value="regular">
+                    <button type="submit">Make Regular</button>
+                    </form>
+                {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+    
+    <!-- Admin Edit Profile -->
+    <div>
+        {% if profile.role == "admin" %}
+        <hr>
+        <h2 style="margin-top: 20px;">Manage Users</h2>
+        <table>
+            <tr>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Gender</th>
+            <th>Role</th>
+            <th>Action</th>
+            </tr>
+            {% for user in all_users %}
+            <tr>
+                <form method="POST" action="{% url 'update_user_role' user.user.username %}">
+                {% csrf_token %}
+                <td>{{ user.user.username }}</td>
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.last_name }}</td>
+                <td>{{ user.gender }}</td>
+                <td>
+                    <select name="role">
+                    <option value="regular" {% if user.role == "regular" %}selected{% endif %}>Regular</option>
+                    <option value="admin" {% if user.role == "admin" %}selected{% endif %}>Admin</option>
+                    </select>
+                </td>
+                <td>
+                    {% if user.user.username != "admin" %}
+                    <button type="submit">Update Role</button>
+                    {% else %}
+                    <strong>(Locked)</strong>
+                    {% endif %}
+                </td>
+                </form>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+  </main>
+
+  <footer style="margin-top: 20px;">
+    <div>
+      <a href="#">Home</a> | <a href="#">About</a> | <a href="#">Privacy</a> |
+      <a href="#">FAQ</a>
+    </div>
+    <div>Copyright 2025 PurrPal</div>
+  </footer>
+</body>
+</html>

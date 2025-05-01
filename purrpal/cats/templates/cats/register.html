@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register - PurrPal</title>
+  <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}">
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh; justify-content: space-between;">
+
+  <!-- Nav Bar -->
+  <header>
+    <div class="logo">
+        <img src="{% static 'cats/images/logo.png' %}" alt="Cat Image">
+        <h1>PurrPal</h1>
+    </div>
+    <div class="nav-container">
+      <nav>
+        <a class="active">Public Forum</a>
+        <a>Cat Health</a>
+        <a>Cat Profiles</a>
+        <a>Settings</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Registration Form -->
+  <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <h2>Join PurrPal 🐱</h2>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="purrpal-login-error" style="color: green; margin-bottom: 10px;">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="POST" style="display: flex; flex-direction: column; width: 25%;">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Register</button>
+    </form>
+    <p style="margin-top: 10px;">Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div>
+      <a href="#">Home</a> | <a href="#">About</a> | <a href="#">Privacy</a> |
+      <a href="#">FAQ</a>
+    </div>
+    <div>Copyright 2025 PurrPal</div>
+  </footer>
+
+</body>
+</html>

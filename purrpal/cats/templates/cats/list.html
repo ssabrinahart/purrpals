@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>PurrPal - Cat Profiles</title>
+    <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}">
+  </head>
+  <body>
+    {% load static %}
+    <!-- Nav Bar -->
+    <header>
+      <div class="logo">
+        <a href="{% url 'home' %}">
+          <img src="{% static 'cats/images/logo.png' %}" alt="Cat Image">
+          <h1>PurrPal</h1>
+        </a>
+      </div>
+      <div class="nav-container">
+        <nav>
+          <a href="{% url 'home' %}" class="active">Public Forum</a>
+          <a href="{% url 'list' %}">Cat Profiles</a>
+
+          <!-- The two links below don't have views yet, so use static or placeholders -->
+          <a href="{% url 'user_list' %}">Users</a>
+
+          <div style="display: flex; flex-direction: column; float: right">
+            <a href="{% url 'settings' %}">Settings</a>
+            {% if request.session.username %}
+              <p class="logout">Logged in as: {{ request.session.username }}</p>
+            {% endif %}
+            <a href="{% url 'logged_out' %}" class="logout">Log Out</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    {% if messages %}
+    <ul class="message-list">
+      {% for message in messages %}
+        <li class="message {{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul> 
+    {% endif %}
+
+    <div class="container">
+      <!-- Sidebar -->
+      <aside>
+        <button class="filter active">All Cats</button>
+        <button class="filter">New Cat</button>
+        <button class="filter">Edit Cat Info</button>
+        <button class="filter">Remove Cat</button>
+      </aside>
+
+      <!-- Content -->
+      <main>
+        <!-- Cat Profile List -->
+        <section class="cat-profile">
+          <div class="cat-header">Willow</div>
+          <div class="cat-details">
+            <p><strong>Breed:</strong> Siamese</p>
+            <p><strong>Age:</strong> 3 years</p>
+            <p><strong>Diet:</strong> High-protein wet food</p>
+            <p><strong>Vet Info:</strong> Vaccinated, annual checkup</p>
+            <div style="display: flex; justify-content: space-between">
+              <img src="{% static 'cats/images/cat.jpg' %}" alt="Cat 1 Image">
+              <a
+                href="{% url 'detail' 1 %}"
+                class="view-more-link"
+                style="align-self: flex-end"
+              >
+                <button class="view-more">View More Info</button>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <div class="cat-list">
+          <div class="cat-name">Cat 2 Name</div>
+          <div class="cat-name">Cat 3 Name</div>
+          <div class="cat-name">Cat 4 Name</div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div>
+        <a href="#">Home</a> | <a href="#">About</a> | <a href="#">Privacy</a> |
+        <a href="#">FAQ </a>
+      </div>
+      <div>Copyright 2025 PurrPal</div>
+    </footer>
+    <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}?v=2">
+  </body>
+</html>

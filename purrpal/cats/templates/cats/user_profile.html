@@ -1,0 +1,66 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{ user_obj.username }}'s Profile - PurrPal</title>
+  <link rel="stylesheet" href="{% static 'cats/css/styles.css' %}">
+</head>
+<body>
+  <!-- Nav Bar -->
+  <header>
+    <div class="logo">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'cats/images/logo.png' %}" alt="Cat Image">
+        <h1>PurrPal</h1>
+      </a>
+    </div>
+    <div class="nav-container">
+      <nav>
+        <a href="{% url 'home' %}" class="active">Public Forum</a>
+        <a href="{% url 'list' %}">Cat Profiles</a>
+        <a href="{% url 'user_list' %}">Users</a>
+
+        <a href="{% url 'settings' %}">Settings</a>
+        <a href="{% url 'logged_out' %}" class="logout">Log Out</a>
+      </nav>
+    </div>
+  </header>
+
+  <main style="padding: 20px; display: flex; justify-content: space-between;">
+    <!-- User Info -->
+    <div>
+    <h2>{{ user_obj.username }}'s Profile</h2>
+    <p><strong>First Name:</strong> {{ user_obj.first_name }}</p>
+    <p><strong>Last Name:</strong> {{ user_obj.last_name }}</p>
+    <p><strong>Email:</strong> {{ user_obj.email }}</p>
+    <p><strong>Gender:</strong> {{ profile.gender|title }}</p>
+    </div>
+
+    <!-- User Feed -->
+    <div style="padding-right: 50px; display: flex; flex-direction: column;">
+      <h2>Recent Activity</h2>
+      {% if activities %}
+        <ul>
+          {% for act in activities %}
+            <li>
+              {{ act.get_sentence|safe }} - 
+              <span style="font-style: italic;">{{ act.timestamp|naturaltime }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p style="font-style: italic;">No recent activity yet.</p>
+      {% endif %}
+    </div>
+    
+  </main>
+  <footer style="margin-top: 20px;">
+    <div>
+      <a href="#">Home</a> | <a href="#">About</a> | <a href="#">Privacy</a> |
+      <a href="#">FAQ</a>
+    </div>
+    <div>Copyright 2025 PurrPal</div>
+  </footer>
+</body>
+</html>
